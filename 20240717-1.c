@@ -11,24 +11,13 @@ int solution(int storey) {
 
     while (storey > 0) {
         int i = (storey % (n * 10)) / n;
-        switch (i) {
-        case 0:
-            break;
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
+        if (i > 5) {
+            storey += (10 - i) * n;
+            answer += 10 - i;
+        }
+        else if (i > 0) {
             storey -= i * n;
             answer += i;
-            break;
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-            storey += 10 - i * n;
-            answer += 10 - i;
-            break;
         }
         n *= 10;
     }
@@ -41,7 +30,7 @@ void main()
 {
     
     int result1 = solution(16);
-    int result2 = solution(2554);
+    int result2 = solution(909);
     printf("%d %d", result1, result2);
 
 }
