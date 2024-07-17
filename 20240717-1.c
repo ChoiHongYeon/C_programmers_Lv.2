@@ -15,6 +15,17 @@ int solution(int storey) {
             storey += (10 - i) * n;
             answer += 10 - i;
         }
+        else if (i == 5) {
+            int j = ((storey - 5 * n) % (n * 100)) / (n * 10);
+            if (j < 5) {
+                storey -= i * n;
+                answer += i;
+            }
+            else {
+                storey += (10 - i) * n;
+                answer += 10 - i;
+            }
+        }
         else if (i > 0) {
             storey -= i * n;
             answer += i;
@@ -30,7 +41,7 @@ void main()
 {
     
     int result1 = solution(16);
-    int result2 = solution(909);
+    int result2 = solution(2554);
     printf("%d %d", result1, result2);
 
 }
