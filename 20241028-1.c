@@ -4,45 +4,29 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
 int solution(int k, int tangerine[], size_t tangerine_len) {
 
+    int* numbers = (int*)calloc(10000001, sizeof(int));
+    for (int i = 0; i < tangerine_len; i++) {
+        numbers[tangerine[i]]++;
+    }
+
+    int* number = (int*)malloc(sizeof(int) * 100000);
+    int n = 0;
+    for (int i = 0; i < 10000001;i++) {
+        if (numbers[i] > 0)
+            number[n++] = numbers[i];
+    }
+    free(numbers);
+
+    qsort(number, n, sizeof(int), compare);
+
     int answer = 0;
-
-    for (size_t i = tangerine_len - 1; i > 0; i--) {
-        for (size_t j = 0; j < i; j++) {
-            if (tangerine[j] > tangerine[j + 1]) {
-                int temp = tangerine[j];
-                tangerine[j] = tangerine[j + 1];
-                tangerine[j + 1] = temp;
-            }
-        }
-    }
-
-    int* number = (int*)malloc(sizeof(int) * tangerine_len);
-    int n = 1;
-    int t = 0;
-    for (size_t i = 1; i < tangerine_len; i++) {
-        if (tangerine[i] == tangerine[i - 1])
-            n++;
-        else {
-            number[t++] = n;
-            n = 1;
-        }
-    }
-    number[t++] = n;
-
-    number = (int*)realloc(number, sizeof(int) * t);
-    for (int i = t - 1; i > 0; i--) {
-        for (int j = 0; j < i; j++) {
-            if (number[j] > number[j + 1]) {
-                int temp = number[j];
-                number[j] = number[j + 1];
-                number[j + 1] = temp;
-            }
-        }
-    }
-
-    for (int i = t - 1; i >= 0; i--) {
+    for (int i = n - 1; i >= 0; i--) {
         k -= number[i];
         answer++;
         if (k <= 0)
