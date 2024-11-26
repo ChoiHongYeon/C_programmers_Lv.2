@@ -18,24 +18,25 @@ int solution(const char* dirs) {
 
     int answer = 0;
     int n = 1;
+
     for (int i = 0; i < strlen(dirs); i++) {
+
+        bool moved = false;
         for (int j = 0; j < 4; j++) {
             if (dirs[i] == UDRL[j]) {
-                if (visited_x[n - 1] + X[j] > 5 || visited_x[n - 1] + X[j] < -5)
-                    visited_x[n] = visited_x[n - 1];
-                else
+                if (visited_x[n - 1] + X[j] >= -5 && visited_x[n - 1] + X[j] <= 5 && visited_y[n - 1] + Y[j] >= -5 && visited_y[n - 1] + Y[j] <= 5) {
+                    moved = true;
                     visited_x[n] = visited_x[n - 1] + X[j];
-                if (visited_y[n - 1] + Y[j] > 5 || visited_y[n - 1] + Y[j] < -5)
-                    visited_y[n] = visited_y[n - 1];
-                else
                     visited_y[n] = visited_y[n - 1] + Y[j];
+                }
             }
         }
-        if (!(visited_x[n] == visited_x[n - 1] && visited_y[n] == visited_y[n - 1])) {
+
+        if (moved) {
             answer++;
             for (int j = 0; j < n; j++) {
                 if (visited_x[n] == visited_x[j] && visited_y[n] == visited_y[j]) {
-                    if (j - 1 >= 0 && visited_x[n - 1] == visited_x[j - 1] && visited_y[n - 1] && visited_y[j - 1]) {
+                    if (j - 1 >= 0 && visited_x[n - 1] == visited_x[j - 1] && visited_y[n - 1] == visited_y[j - 1]) {
                         answer--;
                         break;
                     }
@@ -45,10 +46,11 @@ int solution(const char* dirs) {
                     }
                 }
             }
+            n++;
         }
-        n++;
-    }
 
+    }
+    
     return answer;
 
 }
@@ -56,7 +58,8 @@ int solution(const char* dirs) {
 void main()
 {
 
-    const char* dirs1 = "LULLLLLLU";
-    printf("%d", solution(dirs1));
+    const char* dirs1 = "ULURRDLLU";
+    const char* dirs2 = "LULLLLLLU";
+    printf("%d %d", solution(dirs1), solution(dirs2));
 
 }
