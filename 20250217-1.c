@@ -3,28 +3,43 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <math.h>
 
-bool is_prime(int n) {
+bool is_prime(long long n) {
 
-    if (n < 6) {
-        if (n == 2 || n == 3 || n == 5)
-            return true;
-        else
+    if (n <= 1)
+        return false;
+    else if (n == 2 || n == 3)
+        return true;
+
+    long long s = (long long)sqrt(n);
+    for (long long i = 2; i <= s; i++) {
+        if (n % i == 0)
             return false;
     }
-    else {
-        if ((n - 1) % 6 == 0 || (n - 5) % 6 == 0)
-            return true;
-        else
-            return false;
-    }
+
+    return true;
 
 }
 
 int solution(int n, int k) {
 
+    int q = 1;
+    int p = 0;
+    while (n >= q) {
+        q *= k;
+        p++;
+    }
+    q /= k;
+    p--;
+
     char changed_n[20];
-    itoa(n, changed_n, k);
+    for (int i = 0; i <= p; i++) {
+        changed_n[i] = (n / q) + '0';
+        n -= (n / q) * q;
+        q /= k;
+    }
+    changed_n[p + 1] = '\0';
 
     char numbers[20][20];
     int count = 0;
@@ -32,7 +47,7 @@ int solution(int n, int k) {
     for (int i = 0; i < 20; i++) {
         if (changed_n[i] != '0')
             numbers[count][in_count++] = changed_n[i];
-        else if (changed_n[i] == '0') {
+        else if (changed_n[i] == '0' && in_count != 0) {
             numbers[count++][in_count] = '\0';
             in_count = 0;
         }
@@ -44,7 +59,7 @@ int solution(int n, int k) {
 
     int answer = 0;
     for (int i = 0; i < count; i++) {
-        if (is_prime(atoi(numbers[i])))
+        if (is_prime(atoll((long long)numbers[i])))
             answer++;
     }
 
@@ -56,7 +71,5 @@ void main()
 {
 
     printf("%d %d", solution(437674, 3), solution(110011, 10));
-
+    
 }
-// 프로그래머스에서 itoa 함수 사용 불가. 직접 구현 요망.
-// 6n +- 1 로 소수 판별이 제대로 이루어지지 않을 가능성. ex) 25
